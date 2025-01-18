@@ -262,20 +262,58 @@ export const getEmails = async (req, res) => {
 };
 
 export const addEmail = async (req, res) => {
+  // Create new email instance
   const email = new Email({
     email: req.body.email,
   });
 
   try {
-    const newEmail = await email.save();
-    res.status(201).json(newEmail);
-  } catch (error) {
-    console.log();
-    if (error.keyValue && error.keyValue.email) {
-      res.status(400).json({ message: `${error.keyValue.email} is repeated` });
-    } else {
-      res.status(400).json({ message: "Error adding emails" });
+    // Check if request body contains email
+    if (!req.body.email) {
+      return res.status(400).json({ message: "Email is required" });
     }
+
+    // Check if email already exists before saving
+    const existingEmail = await Email.findOne({ email: req.body.email });
+    if (existingEmail) {
+      return res.status(400).json({ message: `${req.body.email} is repeated` });
+    }
+
+    // Save with timeout to prevent hanging
+    const savePromise = email.save();
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('Save operation timed out')), 5000);
+    });
+
+    const newEmail = await Promise.race([savePromise, timeoutPromise]);
+    res.status(201).json(newEmail);
+
+  } catch (error) {
+    console.error('Error in addEmail:', error);
+
+    // Handle duplicate key error (in case of race condition)
+    if (error.code === 11000) {
+      return res.status(400).json({ 
+        message: `${req.body.email} is repeated` 
+      });
+    }
+
+    // Handle timeout error
+    if (error.message === 'Save operation timed out') {
+      return res.status(503).json({ 
+        message: "Server is busy, please try again" 
+      });
+    }
+
+    // Handle validation errors
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({ 
+        message: "Invalid email format" 
+      });
+    }
+
+    // Generic error handler
+    res.status(400).json({ message: "Error adding emails" });
   }
 };
 
