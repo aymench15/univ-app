@@ -22,9 +22,9 @@ export const AdminPatients = () => {
       header={
         <Stack justifyContent="space-between">
           <div>
-            <h1 className="font-bold text-2xl leading-6">Liste des Patients</h1>
+            <h1 className="font-bold text-2xl leading-6">List of Patients</h1>
             <p className="text-xs text-gray-500 font-normal">
-              Lorem ipsum dolor sit amet consectetur.
+              Manage the list of patients with ease.
             </p>
           </div>
           <div>
@@ -42,8 +42,8 @@ export const AdminPatients = () => {
         loading={isFetching}
         autoHeight
       >
-        <Column flexGrow={1}>
-          <HeaderCell>Nom</HeaderCell>
+        <Column width={320}>
+          <HeaderCell>Name</HeaderCell>
 
           <Cell
             style={{ padding: "6px" }}
@@ -70,26 +70,24 @@ export const AdminPatients = () => {
           </Cell>
         </Column>
 
-        <Column width={150}>
-          <HeaderCell>Créer le</HeaderCell>
+        <Column width={320}>
+          <HeaderCell>Email</HeaderCell>
+          <Cell
+            style={{ padding: "6px" }}
+            className=""
+          >
+            {(item) => item.email}
+          </Cell>
+        </Column>
+
+        <Column width={200}>
+          <HeaderCell>Created on</HeaderCell>
 
           <Cell
             style={{ padding: "6px" }}
             className=""
           >
             {(item) => moment(item.createdAt).format("lll")}
-          </Cell>
-        </Column>
-        <Column>
-          <HeaderCell>Actions</HeaderCell>
-
-          <Cell style={{ padding: "6px" }}>
-            {(item) => (
-              <div
-                hidden={item.isVerified}
-                className="w-100 flex flex-wrap gap-2 justify-end items-center"
-              ></div>
-            )}
           </Cell>
         </Column>
       </Table>

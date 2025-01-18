@@ -12,12 +12,10 @@ const useFecthReview = (url) => {
             setLoading(true)
 
             try {
-                console.log("url is : ",url)
                 const res = await fetch(url)
                 
     
                 const result = await res.json();
-                console.log("result from here review :: ",result)
     
                 if(!res.ok) {
                     throw new Error(result.message + 'error')

@@ -66,164 +66,192 @@ export const getPatients = async (req, res) => {
       .json({ message: "Error fetching patients", error: error.message });
   }
 };
-
 export const getContributions = async (req, res) => {
   try {
-    const { page = 1, limit = 10 } = req.query;
+    const { path } = req.query;
 
-    // Ensure page and limit are numbers
-    const pageNumber = parseInt(page, 10);
-    const limitNumber = parseInt(limit, 10);
-
-    // Paginated users
-    const users = await User.find()
-      .skip((pageNumber - 1) * limitNumber)
-      .limit(limitNumber)
-      .select("name email branch department specialty subject _id") // Ensure _id is included
-      .lean();
-
-    if (!users || users.length === 0) {
-      return res.status(404).json({ message: "No contributors found." });
+    if (!path) {
+      return res.status(400).json({ message: "Path parameter is required" });
     }
 
-    // Fetch contributions for each user and filter those who have at least one contribution
-    const contributions = await Promise.all(
-      users.map(async (user) => {
-        const userContributions = await Document.find({ userId: user._id })
-          .sort({ createdAt: -1 }) // Order by latest first
-          .lean();
+    // Decode the URL-encoded path
+    const decodedPath = decodeURIComponent(path);
+    console.log("Decoded path:", decodedPath);
 
-        if (userContributions.length > 0) {
-          return {
-            ...user,
-            contributions: userContributions.map((contribution) => ({
-              id: contribution._id,
-              name: contribution.name,
-              note: contribution.note,
-              size: contribution.size,
-              cloudinaryUrl: contribution.cloudinaryUrl,
-              createdAt: contribution.createdAt,
-            })),
-            lastContribution: userContributions[0].createdAt,
-          };
-        }
+    // Split the path to get branch hierarchy components
+    const pathComponents = decodedPath.split("/");
+    console.log("Path components:", pathComponents);
 
-        // Exclude users with no contributions
-        return null;
+    // Extract components based on your hierarchy
+    let [branch, department, specialty, subjectType, subject] = pathComponents;
+
+    // Build the query object
+    const query = { branch };
+
+    // Match exact department name
+    if (department) query.department = department;
+    // Match exact subjectType name
+    if (subjectType) query.subjectType = subjectType;
+    // Match exact subject name
+    if (subject) query.subject = subject;
+
+    console.log("Query:", query);
+
+    // Find users matching the criteria
+    const users = await User.find({
+      branch: query.branch,
+      department: query.department,
+      subjectType: query.subjectType,
+      subject: query.subject,
+    })
+      .select("name email PhoneNumber branch department specialty subject subjectType _id")
+      .lean();
+
+    console.log("Found users:", users.length);
+
+    if (!users || users.length === 0) {
+      return res.status(404).json({
+        message: "No professors found for this path.",
+        path: decodedPath,
+        query: query, // Include query for debugging
+      });
+    }
+
+    // Get user IDs
+    const userIds = users.map((user) => user._id);
+
+    // Fetch all documents for these users
+    const allDocuments = await Document.find({
+      userId: { $in: userIds },
+    })
+      .sort({ createdAt: -1 })
+      .lean();
+
+    console.log("Found documents:", allDocuments.length);
+
+    // Create a map of documents by userId
+    const documentsByUser = {};
+    allDocuments.forEach((doc) => {
+      if (!documentsByUser[doc.userId]) {
+        documentsByUser[doc.userId] = [];
+      }
+      documentsByUser[doc.userId].push({
+        id: doc._id,
+        name: doc.name,
+        note: doc.note,
+        size: doc.size,
+        cloudinaryUrl: doc.cloudinaryUrl,
+        createdAt: doc.createdAt,
+      });
+    });
+
+    // Combine user data with their documents
+    const contributions = users
+      .map((user) => {
+        const userDocs = documentsByUser[user._id] || [];
+        if (userDocs.length === 0) return null;
+
+        return {
+          userId: user._id,
+          name: user.name,
+          email: user.email,
+          PhoneNumber:user.PhoneNumber,
+          branch: user.branch,
+          department: user.department,
+          specialty: user.specialty,
+          subject: user.subject,
+          subjectType: user.subjectType,
+          contributions: userDocs,
+          lastContribution: userDocs[0]?.createdAt,
+          totalDocuments: userDocs.length,
+        };
       })
-    );
+      .filter(Boolean)
+      .sort(
+        (a, b) => new Date(b.lastContribution) - new Date(a.lastContribution)
+      );
 
-    // Filter out users without contributions
-    const filteredContributions = contributions.filter((user) => user !== null);
-
-    // Total count for pagination
-    const totalCount = await User.countDocuments();
-
-    res.status(200).json({
-      contributions: filteredContributions,
-      totalPages: Math.ceil(totalCount / limitNumber),
+    return res.status(200).json({
+      path: decodedPath,
+      contributions,
+      totalprofessors: contributions.length,
+      totalDocuments: allDocuments.length,
     });
   } catch (error) {
-    console.error("Error fetching contributions: ", error);
-    res.status(500).json({ error: "Error fetching contributions." });
+    console.error("Error fetching contributions:", error);
+    res.status(500).json({
+      error: "Error fetching contributions",
+      details:
+        process.env.NODE_ENV === "development" ? error.message : undefined,
+    });
   }
 };
 
-// export const getContributions = async (req, res) => {
-//   console.log("reaches !");
-//   console.log(req.query);
-//   try {
-//     const {
-//       page = 1,
-//       limit = 10,
-//       branch,
-//       department,
-//       specialty,
-//       subjectType,
-//       subject,
-//     } = req.query;
+export const getRandomFile = async (req, res) => {
+  console.log("Getting random file", req.query);
+  try {
+    const { path } = req.query;
 
-//     // Ensure page and limit are numbers
-//     const pageNumber = parseInt(page, 10);
-//     const limitNumber = parseInt(limit, 10);
+    if (!path) {
+      return res.status(400).json({ message: "Path parameter is required" });
+    }
 
-//     // Build query based on academic filters
-//     const academicQuery = {};
+    // Split the path into components
+    const pathComponents = path.split("/");
+    const [branch, department, specialty, subjectType, subject] =
+      pathComponents;
 
-//     if (branch) academicQuery["branch"] = { $regex: branch, $options: "i" }; // Case-insensitive search
-//     if (department)
-//       academicQuery["department"] = { $regex: department, $options: "i" }; // Case-insensitive search
-//     if (specialty)
-//       academicQuery["specialty"] = { $regex: specialty, $options: "i" }; // Case-insensitive search
-//     if (subjectType)
-//       academicQuery["subjectType"] = { $regex: subjectType, $options: "i" }; // Case-insensitive search
-//     if (subject) academicQuery["subject"] = { $regex: subject, $options: "i" }; // Case-insensitive search
+    // Build the query dynamically
+    const query = { branch };
+    if (department) query.department = department;
+    if (specialty) query.specialty = specialty;
+    if (subjectType) query.subjectType = subjectType;
+    if (subject) query.subject = subject;
 
-//     console.log("academic : ", academicQuery);
-//     // First find users matching the academic criteria
-//     const users = await User.find(academicQuery);
-//     console.log("users : ", users);
-//     if (!users || users.length === 0) {
-//       return res.status(404).json({
-//         message: "No contributors found matching the selected criteria.",
-//       });
-//     }
+    // Find users matching the query
+    const users = await User.find({
+      branch: query.branch,
+      department: query.department,
+      subjectType: query.subjectType,
+      subject: query.subject,
+    })
+      .select("_id")
+      .lean();
+    if (!users.length) {
+      return res
+        .status(404)
+        .json({ message: "No professors found for this path." });
+    }
 
-//     // Fetch contributions for each filtered user
-//     const contributions = await Promise.all(
-//       users.map(async (user) => {
-//         const userContributions = await Document.find({ userId: user._id })
-//           .sort({ createdAt: -1 }) // Order by latest first
-//           .lean();
+    // Get user IDs
+    const userIds = users.map((user) => user._id);
 
-//         if (userContributions.length > 0) {
-//           return {
-//             ...user,
-//             contributions: userContributions.map((contribution) => ({
-//               id: contribution._id,
-//               name: contribution.name,
-//               note: contribution.note,
-//               size: contribution.size,
-//               cloudinaryUrl: contribution.cloudinaryUrl,
-//               createdAt: contribution.createdAt,
-//             })),
-//             lastContribution: userContributions[0].createdAt,
-//           };
-//         }
+    // Find documents for these users
+    const documents = await Document.find({ userId: { $in: userIds } }).lean();
 
-//         // Exclude users with no contributions
-//         return null;
-//       })
-//     );
+    if (!documents.length) {
+      return res
+        .status(404)
+        .json({ message: "No documents found for this path." });
+    }
 
-//     console.log(contributions)
-//     // Filter out users without contributions
-//     const filteredContributions = contributions.filter((user) => user !== null);
-//     console.log(filteredContributions)
-//     // Get total count based on academic criteria for pagination
-//     const totalCount = await User.countDocuments(academicQuery);
-//     res.status(200).json({
-//       contributions: filteredContributions,
-//       totalPages: Math.ceil(totalCount / limitNumber),
-//       currentPage: pageNumber,
-//       totalContributors: totalCount,
-//       filters: {
-//         branch,
-//         department,
-//         specialty,
-//         subjectType,
-//         subject,
-//       }
-//     });
-//   } catch (error) {
-//     console.error("Error fetching contributions: ", error);
-//     res.status(500).json({
-//       error: "Error fetching contributions.",
-//       details:
-//         process.env.NODE_ENV === "development" ? error.message : undefined,
-//     });
-//   }
-// };
+    // Select a random file
+    const randomFile = documents[Math.floor(Math.random() * documents.length)];
+
+    // Find the user associated with the random file
+    const user = await User.findById(randomFile.userId)
+      .select("name email branch department specialty subject")
+      .lean();
+
+    return res.status(200).json({ document: randomFile, user });
+  } catch (error) {
+    console.error("Error fetching random file:", error);
+    return res
+      .status(500)
+      .json({ message: "Error fetching random file", error: error.message });
+  }
+};
+
 export const getEmails = async (req, res) => {
   try {
     const emails = await Email.find().sort({ createdAt: -1 });
@@ -234,7 +262,6 @@ export const getEmails = async (req, res) => {
 };
 
 export const addEmail = async (req, res) => {
-  console.log("reached");
   const email = new Email({
     email: req.body.email,
   });
@@ -243,59 +270,76 @@ export const addEmail = async (req, res) => {
     const newEmail = await email.save();
     res.status(201).json(newEmail);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    console.log();
+    if (error.keyValue && error.keyValue.email) {
+      res.status(400).json({ message: `${error.keyValue.email} is repeated` });
+    } else {
+      res.status(400).json({ message: "Error adding emails" });
+    }
   }
 };
 
 export const deleteEmail = async (req, res) => {
   try {
+    // Step 1: Find the email
     const email = await Email.findById(req.params.id);
-    if (email) {
-      await email.remove();
-      res.json({ message: "Email deleted" });
-    } else {
-      res.status(404).json({ message: "Email not found" });
+    if (!email) {
+      return res.status(404).json({ message: "Email not found" });
     }
+
+    // Step 2: Find the user by email
+    const user = await User.findOne({ email: email.email });
+    if (user) {
+      // Step 3: Delete all documents associated with the user
+      await Document.deleteMany({ userId: user._id });
+
+      // Step 4: Delete the user
+      await user.remove();
+    }
+
+    // Step 5: Delete the email
+    await email.remove();
+
+    res.json({
+      message: "Email, user, and associated documents deleted successfully",
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Error deleting email, user, or documents:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
 export const getStatistics = async (req, res) => {
   try {
-    // Get total registered documents
-    const totalDocuments = await Document.countDocuments();
+    const [totalDocuments, contributionsThisWeek, contributionsToday] =
+      await Promise.all([
+        Document.countDocuments(),
+        Document.countDocuments({
+          createdAt: {
+            $gte: moment().startOf("week").toDate(),
+            $lte: moment().endOf("week").toDate(),
+          },
+        }),
 
-    // Get the start and end of the current week (Monday to Sunday)
-    const startOfWeek = moment().startOf("week").toDate();
-    const endOfWeek = moment().endOf("week").toDate();
-
-    // Get the total contributions this week
-    const contributionsThisWeek =
-      (await Document.countDocuments({
-        createdAt: { $gte: startOfWeek, $lte: endOfWeek },
-      })) - 1;
-
-    // Get the start and end of today
-    const startOfDay = moment().startOf("day").toDate();
-    const endOfDay = moment().endOf("day").toDate();
-
-    // Get the total contributions today
-    const contributionsToday =
-      (await Document.countDocuments({
-        createdAt: { $gte: startOfDay, $lte: endOfDay },
-      })) - 1;
-
+        Document.countDocuments({
+          createdAt: {
+            $gte: moment().startOf("day").toDate(),
+            $lte: moment().endOf("day").toDate(),
+          },
+        }),
+      ]);
     res.status(200).json({
-      totalDocuments: totalDocuments == 0 ? 0 : totalDocuments,
-      contributionsThisWeek:
-        contributionsThisWeek == 0 ? 0 : contributionsThisWeek,
-      contributionsToday: contributionsToday == 0 ? 0 : contributionsToday,
+      totalDocuments: Math.max(0, totalDocuments),
+      contributionsThisWeek: Math.max(0, contributionsThisWeek),
+      contributionsToday: Math.max(0, contributionsToday),
+      lastUpdated: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("Error fetching statistics: ", error);
-    res
-      .status(500)
-      .json({ message: "Error fetching statistics", error: error.message });
+    console.error("Error fetching statistics:", error);
+    res.status(500).json({
+      error: "Failed to fetch statistics",
+      message: error.message,
+      timestamp: new Date().toISOString(),
+    });
   }
 };

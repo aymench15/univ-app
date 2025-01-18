@@ -35,10 +35,10 @@ export const Admins = () => {
           <Stack justifyContent="space-between">
             <div>
               <h1 className="font-bold text-2xl leading-6">
-                Liste des Administrateurs
+                List of Administrators
               </h1>
               <p className="text-xs text-gray-500 font-normal">
-                Lorem ipsum dolor sit amet consectetur.
+                Manage the list of system administrators.
               </p>
             </div>
             <div className="flex gap-2 flex-wrap">
@@ -51,7 +51,7 @@ export const Admins = () => {
                 onClick={handleOpen}
                 appearance="primary"
               >
-                Ajouter
+                Add
               </Button>
             </div>
           </Stack>
@@ -63,7 +63,7 @@ export const Admins = () => {
           loading={isFetching}
         >
           <Column flexGrow={1}>
-            <HeaderCell>Nom</HeaderCell>
+            <HeaderCell>Name</HeaderCell>
             <Cell
               style={{ padding: "6px" }}
               className=""
@@ -77,7 +77,7 @@ export const Admins = () => {
             </Cell>
           </Column>
           <Column width={150}>
-            <HeaderCell>Créer le</HeaderCell>
+            <HeaderCell>Created on</HeaderCell>
 
             <Cell
               style={{ padding: "6px" }}
@@ -112,7 +112,7 @@ export const Admins = () => {
         containerClassName="flex items-ceneter justify-center"
       >
         <Modal.Header>
-          <Modal.Title>Ajouter un Administrateur</Modal.Title>
+          <Modal.Title>Add an Administrator</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form className="space-y-6">
@@ -122,7 +122,7 @@ export const Admins = () => {
                   htmlFor="name"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Nom
+                  Name
                 </label>
                 <input
                   id="name"
@@ -138,7 +138,7 @@ export const Admins = () => {
                   htmlFor="password"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Mot de passe
+                  Password
                 </label>
                 <input
                   id="password"
@@ -160,7 +160,7 @@ export const Admins = () => {
             onClick={handleCreate}
             appearance="primary"
           >
-            Créer un compte
+            Create an account
           </Button>
           <Button
             disabled={isPending}

@@ -73,46 +73,48 @@ const treeData = {
       specialtySubjects: ["Phytochemistry and Valorization of Biomolecules"]
     }
   },
-  "ST (Civil Engineering)": {
+  "ST (Technology and Sciences)": {
     "Civil Engineering": {
       "Materials in Civil Engineering": {
         commonSubjects: ["RDM 1 and RDM 2"],
         specialtySubjects: ["Mineral Binders, Special Construction Materials, Durability of Materials"]
       }
-    }
-  },
-  "Mechanical Engineering": {
-    "Energy": {
-      commonSubjects: ["Numerical Methods"],
-      specialtySubjects: ["Fluid Mechanics and Heat Transfer"]
     },
-    "Mechanical Engineering and Materials": {
-      commonSubjects: ["Numerical Methods"],
-      specialtySubjects: ["Finite Element Methods and Composite Materials"]
-    }
-  },
-  "Metallurgy": {
-    "Metallurgical Engineering": {
-      commonSubjects: ["Physical Metallurgy 1"],
-      specialtySubjects: ["Phase Transformations"]
-    }
-  },
-  "Electrical Engineering": {
-    "Electrical Control": {
-      commonSubjects: ["Advanced Power Electronics"],
-      specialtySubjects: ["Advanced Electrical Machines"]
-    }
-  },
-  "Process Engineering": {
-    "Chemical Engineering": {
-      commonSubjects: ["Chemical Thermodynamics"],
-      specialtySubjects: ["Unit Operations"]
+
+    "Mechanical Engineering": {
+      "Energy": {
+        commonSubjects: ["Numerical Methods"],
+        specialtySubjects: ["Fluid Mechanics and Heat Transfer"]
+      },
+      "Mechanical Engineering and Materials": {
+        commonSubjects: ["Numerical Methods"],
+        specialtySubjects: ["Finite Element Methods and Composite Materials"]
+      }
     },
-    "Environmental Process Engineering": {
-      commonSubjects: ["Chemical Thermodynamics"],
-      specialtySubjects: ["Management and Treatment of Water, Sludge, and Waste"]
-    }
+    "Metallurgy": {
+      "Metallurgical Engineering": {
+        commonSubjects: ["Physical Metallurgy 1"],
+        specialtySubjects: ["Phase Transformations"]
+      }
+    },
+    "Electrical Engineering": {
+      "Electrical Control": {
+        commonSubjects: ["Advanced Power Electronics"],
+        specialtySubjects: ["Advanced Electrical Machines"]
+      }
+    },
+    "Process Engineering": {
+      "Chemical Engineering": {
+        commonSubjects: ["Chemical Thermodynamics"],
+        specialtySubjects: ["Unit Operations"]
+      },
+      "Environmental Process Engineering": {
+        commonSubjects: ["Chemical Thermodynamics"],
+        specialtySubjects: ["Management and Treatment of Water, Sludge, and Waste"]
+      }
+    },
   },
+
   "SHS (Psychology)": {
     "Psychology": {
       "Work and Organizational Psychology": {
@@ -239,13 +241,13 @@ const CascadingSelects = ({ onChange }) => {
 
       {selectedBranch && (
         <div>
-          <label className="block text-sm font-medium text-gray-700">Department</label>
+          <label className="block text-sm font-medium text-gray-700">Sector</label>
           <select
             value={selectedDepartment}
             onChange={handleDepartmentChange}
             className="mt-1 block w-full p-2 border rounded-md border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
           >
-            <option value="">Select Department</option>
+            <option value="">Select Sector</option>
             {getDepartments().map(dept => (
               <option key={dept} value={dept}>{dept}</option>
             ))}
@@ -272,13 +274,13 @@ const CascadingSelects = ({ onChange }) => {
       {((selectedDepartment && getSubjects().common.length > 0) || 
         (selectedSpecialty && getSubjects().common.length > 0)) && (
         <div>
-          <label className="block text-sm font-medium text-gray-700">Subject Type</label>
+          <label className="block text-sm font-medium text-gray-700">Subject Type (Common or Speciality)</label>
           <select
             value={selectedSubjectType}
             onChange={handleSubjectTypeChange}
             className="mt-1 block w-full p-2 border rounded-md border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
           >
-            <option value="">Select Subject Type</option>
+            <option value="">Subject Type (Common or Speciality)</option>
             <option value="common">Common Subjects</option>
             <option value="specialty">Specialty Subjects</option>
           </select>

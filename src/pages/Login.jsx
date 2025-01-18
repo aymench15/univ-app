@@ -48,7 +48,6 @@ const Login = () => {
       });
 
       const result = await res.json();
-      console.log("login result : ", result);
       if (!res.ok) {
         throw new Error(result.message);
       }

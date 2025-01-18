@@ -38,7 +38,7 @@ const DefaultHomePage = () => (
               Welcome to Questions Bank of the Algerian PhD Exams
               </h1>
               <p className="text__para">
-              Here you can submit your suggested question-exercises for the Algerian PhD exams easily and securely.
+              Here you can submit your suggested questions-exercises for the Algerian PhD exams easily and securely.
               </p>
               <Link
                 to="/login"

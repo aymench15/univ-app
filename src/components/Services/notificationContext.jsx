@@ -16,12 +16,10 @@ export const NotificationProvider = ({ children }) => {
       withCredentials: true,
     });
     newSocket.on('connect', () => {
-      console.log('Socket connected:', newSocket.id);
       setSocket(newSocket);
     });
 
     newSocket.on('notification', (notification) => {
-      console.log('Received notification:', notification);
 
       // In-app notification
       toast(`New message from ${notification.userName}: ${notification.message}`, {

@@ -33,7 +33,6 @@ const Contact = () => {
     }
 
     try {
-      console.log(email, message);
       const response = await newRequest.post(`${BASE_URL}contact/contact-us`, {
         email,
         subject,

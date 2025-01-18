@@ -83,7 +83,6 @@ const Profile = ({ user }) => {
       let response;
     
     if (Capacitor.isNativePlatform()) {
-      console.log("here is the native one !!!")
       response = await newRequest.put(`${BASE_URL}users/usersupdate?id=${user._id}`,
         formDataToSend,
        { headers: {
@@ -111,7 +110,7 @@ const Profile = ({ user }) => {
     navigate("/users/profile/me");
   } catch (error) {
     console.error(error);
-    toast.error(error.message || "Failed to update profile");
+    toast.error(error.response.data.message || "Failed to update profile");
     setLoading(false);
   }
 };

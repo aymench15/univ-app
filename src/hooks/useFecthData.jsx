@@ -4,7 +4,6 @@ import axios from "axios";
 import { useAuth } from "../newApp/modules/auth/useAuth";
 import newRequest from "../utils/newRequest";
 const useFecthData = (url) => {
-  console.log(url);
   const user = useAuth((state) => state.user);
   const {
     data: { data },
@@ -25,7 +24,6 @@ const useFecthData = (url) => {
       );
     },
   });
-  console.log("je return :", data);
   return {
     data,
     loading,

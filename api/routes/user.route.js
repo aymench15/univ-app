@@ -11,7 +11,9 @@ import {
 import { verifyToken } from "../middleware/jwt.js";
 import { authorizeRole } from "../middleware/jwt.js";
 import multer from "multer";
-const upload = multer({ storage: multer.memoryStorage() });
+const upload = multer({ storage: multer.memoryStorage(),  limits: {
+  fileSize: 10 * 1024 * 1024 // 10MB
+} });
 const router = express.Router();
 
 router.delete("/:id", deleteUser);

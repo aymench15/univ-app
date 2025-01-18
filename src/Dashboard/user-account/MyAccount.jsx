@@ -71,7 +71,6 @@ const MyAccount = () => {
 
     loadImage();
   }, [imageSrc]);
-  console.log("data", data);
 
   return (
     <div className="max-w-[1170px] px-5 mx-auto my-10">

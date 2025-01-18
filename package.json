@@ -1,5 +1,5 @@
 {
-  "homepage": "http://aymench15.github.io/psychare",
+  "homepage": "",
   "name": "umkb",
   "private": true,
   "version": "0.0.0",
@@ -74,7 +74,9 @@
     "swiper": "^11.0.5",
     "toaster": "^0.1.2",
     "use-shopping-cart": "^3.2.0",
-    "zustand": "^4.5.5"
+    "zustand": "^4.5.5",
+    "@babel/runtime": "^7.8.4",
+    "@faker-js/faker": "^8.0.1"
   },
   "devDependencies": {
     "@capacitor/assets": "^3.0.5",

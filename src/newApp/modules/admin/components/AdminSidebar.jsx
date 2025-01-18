@@ -21,7 +21,7 @@ export const AdminSidebar = () => {
   const [activeKey, setActiveKey] = React.useState("1");
 
   return (
-    <div className="rounded-lg w-full md:w-4/12">
+    <div className="rounded-lg w-full md:w-3/12">
       <Sidenav
         expanded={true}
         className=""
@@ -61,7 +61,7 @@ export const AdminSidebar = () => {
               className="flex items-center gap-2"
               style={navItemStyles}
             >
-              Liste des docteurs
+              List of doctors
             </Nav.Item> */}
             <Nav.Item
               as={Link}
@@ -71,7 +71,7 @@ export const AdminSidebar = () => {
               className="flex items-center gap-2"
               style={navItemStyles}
             >
-              Liste des utilisateurs
+              List of users
             </Nav.Item>
             <Nav.Item
               as={Link}
@@ -81,7 +81,7 @@ export const AdminSidebar = () => {
               className="flex items-center gap-2"
               style={navItemStyles}
             >
-              Liste des emails acceptées
+              List of accepted emails
             </Nav.Item>
             <Nav.Item
               as={Link}
@@ -91,7 +91,7 @@ export const AdminSidebar = () => {
               className="flex items-center gap-2"
               style={navItemStyles}
             >
-              Liste des administrateurs
+              List of administrators
             </Nav.Item>
           </Nav>
         </Sidenav.Body>

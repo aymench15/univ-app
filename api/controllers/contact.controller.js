@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export const sendContactMessage = async (req, res) => {
-  console.log("ggggg");
   try {
     const { email, subject, message } = req.body;
     console.log(req.body);

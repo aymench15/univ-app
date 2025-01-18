@@ -6,7 +6,6 @@ import Admin from "../models/admin.model.js";
 import { Token } from "../models/token.js";
 import crypto from "crypto";
 import { sendEmail } from "../utils/sendEmail.js";
-import { uploadImageToCloudinary } from "../utils/cloudinaryUpload.js";
 import { resetPasswordValidation } from "../models/user.model.js";
 import Emails from "../models/acceptedEmails.model.js";
 import dotenv from "dotenv";

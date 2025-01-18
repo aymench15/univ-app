@@ -5,11 +5,9 @@ import multer from "multer";
 import Grid from "gridfs-stream";
 import path from "path";
 import { Token } from "../models/token.js";
-// import Appointments from "../models/appointments.model.js";
-// import Review from "../models/review.model.js";
+import {resetPasswordValidation} from '../models/user.model.js'
 import {
-  uploadImageToCloudinary,
-  uploadPdfToCloudinary,
+  uploadFile,isSupportedFileType,
 } from "../utils/cloudinaryUpload.js";
 import formidable from "formidable";
 import Document from "../models/document.model.js";
@@ -49,7 +47,12 @@ export const userUpdate = async (req, res) => {
   console.log("update user !", req.body);
   try {
     const { password, ...otherUpdates } = req.body;
+    const { error } = resetPasswordValidation({ password });
 
+    if (error) {
+          console.log(error.details[0].message)
+      return res.status(401).json({ message: error.details[0].message });
+    }
     let updatedUser;
     if (password) {
       const salt = await bcrypt.genSalt(10);
@@ -183,46 +186,260 @@ export const verifyEmailUsers = async (req, res) => {
   }
 };
 
+// export const uploadDocuments = async (req, res, next) => {
+//   console.log("UploadDocuments");
+//   try {
+//     console.log("id : ", req.user);
+//     const { file } = req;
+
+//     if (!file || file.mimetype !== "application/pdf") {
+//       return res
+//         .status(400)
+//         .json({ error: "Invalid file type. Only PDFs allowed." });
+//     }
+
+//     // Upload to Cloudinary
+//     const result = await uploadPdfToCloudinary(file.buffer);
+
+//     // Save document metadata to the database
+//     const newDocument = new Document({
+//       userId: req.user.id,
+//       name: file.originalname,
+//       size: file.size,
+//       cloudinaryUrl: result.secure_url,
+//       note: req.body.note || "",
+//     });
+
+//     await newDocument.save();
+//     const user = await User.findById(req.user.id);
+//     const emailContent = `
+//     <div style="text-align: center;">
+//       <img src="https://res.cloudinary.com/diawojtfk/image/upload/v1736643192/fxkpbqlqrmu6ay58sp6v.png" alt="UMKB Logo" style="width: 100px; height: auto;"><br><br>
+//       Dear ${user.name},<br>
+//       Thank you for successfully uploading your file.<br><br>
+//       ----------------<br>
+//       <b>UMKB</b><br>
+//     </div>`;
+//     await sendEmail(user.email, "File uploaded succefully", emailContent);
+//     res.status(200).json({ message: "Document uploaded successfully" });
+//   } catch (error) {
+//     console.error("Error uploading document:", error);
+//     res
+//       .status(500)
+//       .json({ error: "Failed to upload document", details: error.message });
+//   }
+// };
+
+// export const uploadDocuments = async (req, res, next) => {
+//   console.log("UploadDocuments");
+//   try {
+//     console.log("user id:", req.user);
+//     const { file } = req;
+
+//     // Check if file exists
+//     if (!file) {
+//       return res.status(400).json({ error: "No file uploaded." });
+//     }
+
+//     // Validate file type
+//     const supportedTypes = [
+//       'application/pdf',
+//       'application/msword',
+//       'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+//     ];
+
+//     if (!supportedTypes.includes(file.mimetype)) {
+//       return res.status(400).json({
+//         error: "Invalid file type. Only PDF and Word documents are allowed."
+//       });
+//     }
+
+//     // Upload to Cloudinary
+//     const uploadResult = await uploadFile(file);
+
+//     // Save document metadata to database
+//     const newDocument = new Document({
+//       userId: req.user.id,
+//       name: file.originalname,
+//       size: file.size,
+//       cloudinaryUrl: uploadResult.secure_url,
+//       cloudinaryPublicId: uploadResult.public_id,
+//       fileType: uploadResult.fileType || file.mimetype,
+//       note: req.body.note || "",
+//       uploadDate: new Date()
+//     });
+
+//     await newDocument.save();
+
+//     // Fetch user for email notification
+//     const user = await User.findById(req.user.id);
+//     if (!user) {
+//       throw new Error("User not found");
+//     }
+
+//     // Generate user-friendly file type text
+//     const fileTypeMap = {
+//       'application/pdf': 'PDF',
+//       'application/msword': 'Word Document',
+//       'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'Word Document'
+//     };
+
+//     const fileTypeText = fileTypeMap[file.mimetype] || 'Document';
+
+//     // Create email content
+//     const emailContent = `
+//     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+//       <div style="text-align: center;">
+//         <img src="https://res.cloudinary.com/diawojtfk/image/upload/v1736643192/fxkpbqlqrmu6ay58sp6v.png" 
+//              alt="UMKB Logo" 
+//              style="width: 100px; height: auto;">
+//       </div>
+      
+//       <div style="margin-top: 20px; background-color: #f9f9f9; padding: 20px; border-radius: 5px;">
+//         <h2 style="color: #333; margin-bottom: 20px;">Document Upload Successful</h2>
+        
+//         <p>Dear ${user.name},</p>
+        
+//         <p>Your document has been successfully uploaded to our system.</p>
+        
+//         <div style="margin: 20px 0; padding: 15px; background-color: #fff; border-radius: 5px;">
+//           <p style="margin: 5px 0;"><strong>File Name:</strong> ${file.originalname}</p>
+//           <p style="margin: 5px 0;"><strong>File Type:</strong> ${fileTypeText}</p>
+//           <p style="margin: 5px 0;"><strong>File Size:</strong> ${(file.size / (1024 * 1024)).toFixed(2)} MB</p>
+//           ${req.body.note ? `<p style="margin: 5px 0;"><strong>Note:</strong> ${req.body.note}</p>` : ''}
+//         </div>
+
+//         <p style="color: #666; font-size: 0.9em;">If you did not upload this document, please contact our support team immediately.</p>
+//       </div>
+      
+//       <div style="text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
+//         <p style="color: #666;">Best regards,<br><strong>UMKB Team</strong></p>
+//       </div>
+//     </div>`;
+
+//     // Send email notification
+//     try {
+//       await sendEmail(
+//         user.email,
+//         "Document Upload Confirmation",
+//         emailContent
+//       );
+//     } catch (emailError) {
+//       console.error("Error sending email notification:", emailError);
+//       // Continue execution even if email fails
+//     }
+
+//     // Send success response
+//     res.status(200).json({
+//       message: "Document uploaded successfully",
+//       document: {
+//         id: newDocument._id,
+//         name: newDocument.name,
+//         type: newDocument.fileType,
+//         url: newDocument.cloudinaryUrl
+//       }
+//     });
+
+//   } catch (error) {
+//     console.error("Error uploading document:", error);
+//     res.status(500).json({
+//       error: "Failed to upload document",
+//       details: error.message
+//     });
+//   }
+// };
+
+
 export const uploadDocuments = async (req, res, next) => {
-  console.log("UploadDocuments");
   try {
-    console.log("id : ", req.user);
     const { file } = req;
 
-    if (!file || file.mimetype !== "application/pdf") {
-      return res
-        .status(400)
-        .json({ error: "Invalid file type. Only PDFs allowed." });
+    if (!file) {
+      return res.status(400).json({ error: "No file uploaded." });
+    }
+
+    // Validate file type using the imported utility
+    if (!isSupportedFileType(file.mimetype)) {
+      return res.status(400).json({
+        error: "Invalid file type. Only PDF, Word documents, and images are allowed."
+      });
     }
 
     // Upload to Cloudinary
-    const result = await uploadPdfToCloudinary(file.buffer);
+    const uploadResult = await uploadFile(file);
 
-    // Save document metadata to the database
+    // Save document metadata to database
     const newDocument = new Document({
       userId: req.user.id,
       name: file.originalname,
       size: file.size,
-      cloudinaryUrl: result.secure_url,
+      cloudinaryUrl: uploadResult.secure_url,
+      cloudinaryPublicId: uploadResult.public_id,
+      fileType: uploadResult.fileType || file.mimetype,
       note: req.body.note || "",
+      uploadDate: new Date()
     });
 
     await newDocument.save();
     const user = await User.findById(req.user.id);
+     // Create email content
     const emailContent = `
-    <div style="text-align: center;">
-      <img src="https://res.cloudinary.com/diawojtfk/image/upload/v1736643192/fxkpbqlqrmu6ay58sp6v.png" alt="UMKB Logo" style="width: 100px; height: auto;"><br><br>
-      Dear ${user.name},<br>
-      Thank you for successfully uploading your file.<br><br>
-      ----------------<br>
-      <b>UMKB</b><br>
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+      <div style="text-align: center;">
+        <img src="https://res.cloudinary.com/diawojtfk/image/upload/v1736643192/fxkpbqlqrmu6ay58sp6v.png" 
+             alt="UMKB Logo" 
+             style="width: 100px; height: auto;">
+      </div>
+      
+      <div style="margin-top: 20px; background-color: #f9f9f9; padding: 20px; border-radius: 5px;">
+        <h2 style="color: #333; margin-bottom: 20px;">Document Upload Successful</h2>
+        
+        <p>Dear ${user.name},</p>
+        
+        <p>Your document has been successfully uploaded to our system.</p>
+        
+        <div style="margin: 20px 0; padding: 15px; background-color: #fff; border-radius: 5px;">
+          <p style="margin: 5px 0;"><strong>File Name:</strong> ${file.originalname}</p>
+          <p style="margin: 5px 0;"><strong>File Size:</strong> ${(file.size / (1024 * 1024)).toFixed(2)} MB</p>
+          ${req.body.note ? `<p style="margin: 5px 0;"><strong>Note:</strong> ${req.body.note}</p>` : ''}
+        </div>
+
+        <p style="color: #666; font-size: 0.9em;">If you did not upload this document, please contact our support team immediately.</p>
+      </div>
+      
+      <div style="text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
+        <p style="color: #666;">Best regards,<br><strong>UMKB Team</strong></p>
+      </div>
     </div>`;
-    await sendEmail(user.email, "File uploaded succefully", emailContent);
-    res.status(200).json({ message: "Document uploaded successfully" });
+
+    // Send email notification
+    try {
+      await sendEmail(
+        user.email,
+        "Document Upload Confirmation",
+        emailContent
+      );
+    } catch (emailError) {
+      console.error("Error sending email notification:", emailError);
+      // Continue execution even if email fails
+    }
+   
+
+    res.status(200).json({
+      message: "Document uploaded successfully",
+      document: {
+        id: newDocument._id,
+        name: newDocument.name,
+        type: newDocument.fileType,
+        url: newDocument.cloudinaryUrl
+      }
+    });
+
   } catch (error) {
     console.error("Error uploading document:", error);
-    res
-      .status(500)
-      .json({ error: "Failed to upload document", details: error.message });
+    res.status(500).json({
+      error: "Failed to upload document",
+      details: error.message
+    });
   }
 };
