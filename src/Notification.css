@@ -1,0 +1,23 @@
+.notification {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background-color: #444;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    opacity: 0.9;
+    animation: fadein 0.5s, fadeout 0.5s 4.5s;
+  }
+  
+  @keyframes fadein {
+    from { bottom: 0; opacity: 0; }
+    to { bottom: 10px; opacity: 0.9; }
+  }
+  
+  @keyframes fadeout {
+    from { bottom: 10px; opacity: 0.9; }
+    to { bottom: 0; opacity: 0; }
+  }
