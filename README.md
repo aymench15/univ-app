@@ -2,30 +2,23 @@
 
 A full-stack web application built with **React.js**, **Tailwind CSS**, **Node.js (backend in `/api` folder)**, and **Capacitor** for mobile support.
 
----
-
-## 🖼️ Screenshots
-
-<img src="images/screenshot1.png" alt="App Screenshot 1" width="600"/>
-<img src="images/screenshot2.png" alt="App Screenshot 2" width="600"/>
-
----
 
 ## 📦 Folder Structure
 
 my-project/
+
 ├── api/ # Node.js backend
-
+├
 ├── public/
-
+├
 ├── src/ # React frontend
-
+├
 ├── capacitor.config.ts
-
+├
 ├── tailwind.config.js
-
+├
 ├── package.json
-
+├
 ├── README.md
 
 yaml
@@ -53,7 +46,7 @@ Edit
 👉 If you **don’t have Node.js installed**, download and install it from [https://nodejs.org/](https://nodejs.org/)  
 👉 To check if Node.js is already installed:
 
-```bash
+bash
 node -v
 npm -v
 If both return a version number, you’re good to go!
@@ -164,3 +157,13 @@ Copy
 Edit
 npm run build
 npx cap copy
+
+
+---
+
+## 🖼️ Screenshots
+
+<img src="images/screenshot1.png" alt="App Screenshot 1" width="600"/>
+<img src="images/screenshot2.png" alt="App Screenshot 2" width="600"/>
+
+---
