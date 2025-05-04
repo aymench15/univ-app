@@ -93,6 +93,7 @@ CLOUDINARY_API_SECRET = Fg5HKnbimW-KMQcwhnBPq87nisY
 CLOUDINARY_URL = cloudinary://835315952334123:Fg5HKnbimW-KMQcwhnBPq87nisY@diawojtfk
 
 BASE_URL = http://localhost:8800/
+````
 
 ✅ Important: Replace sensitive credentials if deploying publicly or use environment variables safely.
 
@@ -101,6 +102,7 @@ BASE_URL = http://localhost:8800/
 ✅ Start Backend (API)
 
 From /api folder:
+
 ```bash
 node server.js
 ```
