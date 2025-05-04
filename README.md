@@ -132,18 +132,6 @@ npx cap copy
 ```
 The frontend will be available at [http://localhost:5173/](http://localhost:5173/). Ensure that the frontend is configured to make API requests to [http://localhost:8800/](http://localhost:8800/).
 
-### 📱 **Capacitor Setup (Mobile)**
-```bash
-npx cap init
-npx cap add android
-npx cap add ios
-npx cap sync
-npx cap open android
-# or
-npx cap open ios
-npm run build
-npx cap copy
-```
 ---
 
 ## 🖼️ Screenshots
