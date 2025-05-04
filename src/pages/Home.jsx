@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import viceRector from "../assets/images/viceRector.png";
+import infostock from "../assets/images/info-stock.png";
 
 import { Link, Navigate } from "react-router-dom";
 
@@ -49,9 +50,9 @@ const DefaultHomePage = () => (
             </div>
           </div>
           <div className="flex gap-[30px] justify-end">
-            <div>
+            <div className="w-3/4">
               <img
-                src={viceRector}
+                src={infostock}
                 alt=""
                 className="w-full"
               />
