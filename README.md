@@ -1,7 +1,6 @@
 # 🚀 My Web Project
 
-A full-stack web application built with **React.js**, **Tailwind CSS**, **Node.js (backend in `/api` folder)**, and **Capacitor** for mobile support.
-
+A comprehensive full-stack web application developed using **React.js**, **Tailwind CSS**, **Node.js** (backend located in the `/api` folder), and **Capacitor** for mobile support.
 
 ## 📦 Folder Structure
 
@@ -25,13 +24,11 @@ my-project/
 
 ## 🛠️ **Technologies Used**
 
-- React.js
-- Tailwind CSS
-- Node.js + Express
-- Capacitor
-- MongoDB
-- Cloudinary
-- Nodemailer
+- **Frontend:** React.js, Tailwind CSS
+- **Backend:** Node.js, Express
+- **Database:** MongoDB
+- **Cloud Services:** Cloudinary
+- **Email Services:** Nodemailer
 
 ---
 
@@ -39,13 +36,13 @@ my-project/
 
 ### 1️⃣ **Install Node.js**
 
-👉 If you **don’t have Node.js installed**, download and install it from [https://nodejs.org/](https://nodejs.org/)  
-👉 To check if Node.js is already installed:
+If you **don't have Node.js installed**, download and install it from [Node.js Official Website](https://nodejs.org/).  
+To verify the installation, run the following commands:
 
 bash
 node -v
 npm -v
-If both return a version number, you’re good to go!
+If both return a version number, you're good to go!
 
 2️⃣ Clone the repository
 
@@ -69,7 +66,7 @@ npm install
 
 📝 Backend Configuration (.env)
 
-Inside /api folder, create a file called .env and paste the following content:
+Inside the `/api` folder, create a file named `.env` and include the following content:
 
 MONGO = mongodb+srv://vicerector:vicerector1234@verify-docs.iqzw8.mongodb.net/?retryWrites=true&w=majority&appName=verify-docs
 
@@ -99,7 +96,6 @@ CLOUDINARY_URL = cloudinary://835315952334123:Fg5HKnbimW-KMQcwhnBPq87nisY@diawoj
 
 BASE_URL = http://localhost:8800/
 
-
 ✅ Important: Replace sensitive credentials if deploying publicly or use environment variables safely.
 
 🏃‍♂️ Running the Project in Development
@@ -126,7 +122,6 @@ Frontend runs on http://localhost:5173/
 
 Initialize Capacitor (if not done already):
 
-
 npx cap init
 
 Add platform:
@@ -151,12 +146,34 @@ npm run build
 
 npx cap copy
 
-
 ---
 
 ## 🖼️ Screenshots
 
-<img src="images/screenshot1.png" alt="App Screenshot 1" width="600"/>
-<img src="images/screenshot2.png" alt="App Screenshot 2" width="600"/>
+<img src="images_for_areadme/1.png" alt="App Screenshot 1" width="600"/>
+<hr/>
+<img src="images_for_areadme/2.png" alt="App Screenshot 2" width="600"/>
+<hr/>
+<img src="images_for_areadme/3.png" alt="App Screenshot 3" width="600"/>
+<hr/>
+<img src="images_for_areadme/4.png" alt="App Screenshot 4" width="600"/>
+<hr/>
+<img src="images_for_areadme/5.png" alt="App Screenshot 5" width="600"/>
+<hr/>
+<img src="images_for_areadme/6.png" alt="App Screenshot 6" width="600"/>
+<hr/>
+<img src="images_for_areadme/7.png" alt="App Screenshot 7" width="600"/>
+<hr/>
+<img src="images_for_areadme/8.png" alt="App Screenshot 8" width="600"/>
+<hr/>
+<img src="images_for_areadme/9.png" alt="App Screenshot 9" width="600"/>
+<hr/>
+<img src="images_for_areadme/10.png" alt="App Screenshot 10" width="600"/>
+<hr/>
+<img src="images_for_areadme/11.png" alt="App Screenshot 11" width="600"/>
+<hr/>
+<img src="images_for_areadme/12.png" alt="App Screenshot 12" width="600"/>
+<hr/>
+<img src="images_for_areadme/13.png" alt="App Screenshot 13" width="600"/>
 
 ---
