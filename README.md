@@ -1,6 +1,6 @@
 # 🚀 My Web Project
 
-A comprehensive full-stack web application developed using **React.js**, **Tailwind CSS**, **Node.js** (backend located in the `/api` folder), and **Capacitor** for mobile support.
+A comprehensive full-stack web application developed using **React.js**, **Tailwind CSS**, **Node.js** (backend located in the `/api` folder), **Vite**, and **Capacitor** for mobile support.
 
 ## 📦 Folder Structure
 
@@ -24,7 +24,7 @@ my-project/
 
 ## 🛠️ **Technologies Used**
 
-- **Frontend:** React.js, Tailwind CSS
+- **Frontend:** React.js, Tailwind CSS, Vite
 - **Backend:** Node.js, Express
 - **Database:** MongoDB
 - **Cloud Services:** Cloudinary
@@ -106,11 +106,11 @@ From /api folder:
 
 node server.js
 
-Backend will run on http://localhost:8800/
+The backend will be accessible at [http://localhost:8800/](http://localhost:8800/).
 
-✅ Start Frontend
+#### ✅ Start Frontend
 
-Go back to the root folder:
+Return to the root folder and execute:
 
 npm run dev
 
@@ -144,6 +144,33 @@ Build frontend and copy to Capacitor:
 
 npm run build
 
+npx cap copy
+
+The frontend will be available at [http://localhost:5173/](http://localhost:5173/). Ensure that the frontend is configured to make API requests to [http://localhost:8800/](http://localhost:8800/).
+
+### 📱 **Capacitor Setup (Mobile)**
+
+If you haven't initialized Capacitor yet, do so with:
+
+npx cap init
+
+Add the desired platforms:
+
+npx cap add android
+npx cap add ios
+
+Sync and open the native project:
+
+npx cap sync
+npx cap open android
+
+# or
+
+npx cap open ios
+
+Finally, build the frontend and copy it to Capacitor:
+
+npm run build
 npx cap copy
 
 ---

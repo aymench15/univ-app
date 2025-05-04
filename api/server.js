@@ -21,9 +21,6 @@ app.use(
     origin: [
       "http://localhost:3000",
       "http://localhost:5173",
-      "https://moncite.com",
-      "https://www.moncite.com",
-
       // "http://localhost:5174",
     ],
     credentials: true,
@@ -35,9 +32,9 @@ app.use(cookieParser());
 app.use(
   cookieSession({
     name: "session",
-    keys: ["accessToken", "accessTokenAdmin"], // Replace with your own secret key
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
-    httpOnly: false, // Set to true for production to prevent client-side access
+    keys: ["accessToken", "accessTokenAdmin"], 
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+    httpOnly: false, 
   })
 );
 
@@ -75,8 +72,6 @@ const io = new socketIo(server, {
     origin: [
       "http://localhost:3000",
       "http://localhost:5173",
-      "http://phdexo.univ-biskra.dz",
-      "https://phdexo.univ-biskra.dz"
     ],
   },
 });
