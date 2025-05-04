@@ -177,30 +177,30 @@ npx cap copy
 
 ## 🖼️ Screenshots
 
-<img src="images_for_areadme/1.png" alt="App Screenshot 1" width="600"/>
+<img src="images_for_readme/1.png" alt="App Screenshot 1" width="600"/>
 <hr/>
-<img src="images_for_areadme/2.png" alt="App Screenshot 2" width="600"/>
+<img src="images_for_readme/2.png" alt="App Screenshot 2" width="600"/>
 <hr/>
-<img src="images_for_areadme/3.png" alt="App Screenshot 3" width="600"/>
+<img src="images_for_readme/3.png" alt="App Screenshot 3" width="600"/>
 <hr/>
-<img src="images_for_areadme/4.png" alt="App Screenshot 4" width="600"/>
+<img src="images_for_readme/4.png" alt="App Screenshot 4" width="600"/>
 <hr/>
-<img src="images_for_areadme/5.png" alt="App Screenshot 5" width="600"/>
+<img src="images_for_readme/5.png" alt="App Screenshot 5" width="600"/>
 <hr/>
-<img src="images_for_areadme/6.png" alt="App Screenshot 6" width="600"/>
+<img src="images_for_readme/6.png" alt="App Screenshot 6" width="600"/>
 <hr/>
-<img src="images_for_areadme/7.png" alt="App Screenshot 7" width="600"/>
+<img src="images_for_readme/7.png" alt="App Screenshot 7" width="600"/>
 <hr/>
-<img src="images_for_areadme/8.png" alt="App Screenshot 8" width="600"/>
+<img src="images_for_readme/8.png" alt="App Screenshot 8" width="600"/>
 <hr/>
-<img src="images_for_areadme/9.png" alt="App Screenshot 9" width="600"/>
+<img src="images_for_readme/9.png" alt="App Screenshot 9" width="600"/>
 <hr/>
-<img src="images_for_areadme/10.png" alt="App Screenshot 10" width="600"/>
+<img src="images_for_readme/10.png" alt="App Screenshot 10" width="600"/>
 <hr/>
-<img src="images_for_areadme/11.png" alt="App Screenshot 11" width="600"/>
+<img src="images_for_readme/11.png" alt="App Screenshot 11" width="600"/>
 <hr/>
-<img src="images_for_areadme/12.png" alt="App Screenshot 12" width="600"/>
+<img src="images_for_readme/12.png" alt="App Screenshot 12" width="600"/>
 <hr/>
-<img src="images_for_areadme/13.png" alt="App Screenshot 13" width="600"/>
+<img src="images_for_readme/13.png" alt="App Screenshot 13" width="600"/>
 
 ---
