@@ -15,11 +15,17 @@ A full-stack web application built with **React.js**, **Tailwind CSS**, **Node.j
 
 my-project/
 ├── api/ # Node.js backend
+
 ├── public/
+
 ├── src/ # React frontend
+
 ├── capacitor.config.ts
+
 ├── tailwind.config.js
+
 ├── package.json
+
 ├── README.md
 
 yaml
