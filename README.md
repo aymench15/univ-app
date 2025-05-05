@@ -53,8 +53,8 @@ cd univ-app
 ### 3️⃣ Install frontend dependencies
 ```bash
 npm install
-# or using Yarn:
-yarn install
+# If the above command fails, try:
+npm install --legacy-peer-deps
 ```
 
 ### 4️⃣ Install backend dependencies
